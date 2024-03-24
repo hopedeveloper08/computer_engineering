@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %} Maze {% endblock %}
+
+{% block main %}
+    <div class="col-10">
+        {% for i in range(maze[0]|length + 2) %}
+            <div style="width: 25px; height: 25px" class="bg-dark d-inline-block"></div>
+        {% endfor %}
+        <br>
+        {% for i in range(maze[0]|length) %}
+            <div style="width: 25px; height: 25px" class="bg-dark d-inline-block"></div>
+            {% for j in range(maze[0]|length) %}
+                {% if maze[i][j] == '1' %}
+                    <div style="width: 25px; height: 25px" class="bg-secondary d-inline-block"></div>
+                {% elif maze[i][j] == '0' %}
+                    <div style="width: 25px; height: 25px" class="bg-light d-inline-block"></div>
+                {% endif %}
+            {% endfor %}
+            <div style="width: 25px; height: 25px" class="bg-dark d-inline-block"></div>
+            <br>
+        {% endfor %}
+        {% for i in range(maze[0]|length + 2) %}
+            <div style="width: 25px; height: 25px" class="bg-dark d-inline-block"></div>
+        {% endfor %}
+    </div>
+{% endblock %}

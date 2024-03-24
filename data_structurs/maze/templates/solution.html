@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %} Solution {% endblock %}
+
+{% block main %}
+    <div class="row">
+        <div class="col-8">
+            {% for i in range(maze[0]|length + 2) %}
+                <div style="width: 30px; height: 30px" class="bg-dark d-inline-block"></div>
+            {% endfor %}
+            <br>
+            {% for i in range(maze[0]|length) %}
+                <div style="width: 30px; height: 30px" class="bg-dark d-inline-block"></div>
+                {% for j in range(maze[0]|length) %}
+                    {% if maze[i][j] == '1' %}
+                        <div id="{{ i }}-{{ j }}" style="width: 30px; height: 30px" class="bg-secondary d-inline-block"></div>
+                    {% elif maze[i][j] == '0' %}
+                        <div id="{{ i }}-{{ j }}" style="width: 30px; height: 30px" class="bg-light d-inline-block"></div>
+                    {% endif %}
+                {% endfor %}
+                <div style="width: 30px; height: 30px" class="bg-dark d-inline-block"></div>
+                <br>
+            {% endfor %}
+            {% for i in range(maze[0]|length + 2) %}
+                <div style="width: 30px; height: 30px" class="bg-dark d-inline-block"></div>
+            {% endfor %}
+        </div>
+        <div class="col-4 d-flex align-items-center">
+            <div class="container-fluid">
+                <div class="row">
+                    <h3 onclick="start()" class="btn btn-primary">START!</h3>
+                    <div id="p" class="col-12">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const rat = '<img src="../static/mouse.jpg" width="30px" height="30px" class="d-inline-block">'
+        const path = []
+
+        {% for i in path %}
+            path.push({{ i }})
+        {% endfor %}
+
+        document.getElementById(`${path[path.length - 1][0]}-${path[path.length - 1][1]}`).innerHTML = '<img src="../static/cheese.jpg" width="30px" height="30px"  class="d-inline-block">'
+        document.getElementById(`${path[0][0]}-${path[0][1]}`).innerHTML = rat
+        function start() {
+            if (path.length === 0) {
+                document.getElementById("p").append("not found!!!")
+                return
+            }
+
+            document.getElementById(`${path[path.length - 1][0]}-${path[path.length - 1][1]}`).innerHTML = '<img src="../static/cheese.jpg" width="30px" height="30px"  class="d-inline-block">'
+            document.getElementById("p").innerHTML = null
+            for(let i = 0;i < path.length;i++) {
+                setTimeout(() => {
+                    try {
+                        document.getElementById(`${path[i - 1][0]}-${path[i - 1][1]}`).innerHTML = '<div style="width: 30px; height: 30px" class="bg-success d-inline-block"></div>'
+                    } catch (e) {}
+                    document.getElementById(`${path[i][0]}-${path[i][1]}`).innerHTML = rat
+                    document.getElementById("p").append(`(${path[i]}) \n`)
+                }, 1000 * i)
+            }
+        }
+    </script>
+{% endblock %}
+
+

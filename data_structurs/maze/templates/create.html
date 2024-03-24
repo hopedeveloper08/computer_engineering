@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block title %} create maze {% endblock %}
+
+{% block css %}
+body {
+  text-align: center;
+  color: #f5f5f5;
+  background-image: linear-gradient(-90deg , #0c0c0d, #1a1a1a);
+  font-family: 'Roboto';
+}
+
+.app {
+  margin: 0 auto;
+}
+
+article {
+  position: relative;
+  width: 25px;
+  height: 25px;
+  margin: 3px;
+  float: left;
+  border: 2px solid #50bcf2;
+  box-sizing: border-box;
+}
+
+article div {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: .5s ease;
+}
+
+article input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 25px;
+  height: 25px;
+  opacity: 0;
+  cursor: pointer;
+}
+
+input[type=checkbox]:checked ~ div {
+  background-color: #50bcf2;
+}
+
+.create-btn {
+  display: block;
+  margin: 30px auto;
+  width: 200px;
+  padding: 10px 20px;
+  border: 2px solid #50bcf2;
+  border-radius: 50px;
+  color: #f5f5f5;
+  font-size: 18px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: .3s ease;
+}
+
+.create-btn:hover {
+  background-color: #50bcf2;
+}
+
+{% endblock %}
+
+{% block main %}
+<section class="app">
+
+    <form method="post" action="/">
+        <div class="input-group-text mb-3 w-50 bg-dark">
+            <span class="input-group-text bg-dark text-light" id="inputGroup-sizing-default">Maze size</span>
+            <input required name="size" type="number" onchange="insert_box()" id="size" class="form-control bg-dark text-light input-group-text" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+        </div>
+
+
+        <div style="height: 65vh;width: 100%" id="box">
+        </div>
+        <button type="submit" class="btn create-btn">Create</button>
+    </form>
+    <div class="input-group-text mb-3 w-50 bg-dark">
+        <a id="random" href="/random/5"><span class="input-group-text bg-dark text-light" id="inputGroup-sizing-default">Create random Maze</span></a>
+        <input id="num" type="number" onchange="set_size()" class="form-control bg-dark text-light input-group-text" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+    </div>
+
+
+</section>
+
+<script>
+    const box = document.getElementById("box")
+    const tag = '<article><input name="index" type="checkbox"/><div></div></article>'
+    function insert_box() {
+        let n = document.getElementById("size").value;
+        let boxes = ''
+        let counter = 0
+        for(let i = 0;i < n;i++) {
+            for (let j = 0; j < n; j++) {
+                let temp = tag.replace('index', `${counter}`)
+                counter++
+                boxes += temp
+            }
+            boxes += '<br><br>'
+        }
+        box.innerHTML = boxes
+    }
+    function set_size() {
+        let size = document.getElementById("num").value
+        document.getElementById("random").setAttribute("href", `/random/${size}`)
+    }
+</script>
+{% endblock %}
