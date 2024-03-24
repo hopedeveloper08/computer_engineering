@@ -1,0 +1,8 @@
+cat,gorbe
+dog,sag
+tree,derakht
+car,mashin va otomobile
+apple,sib
+application,barname
+zoo,bagh vahsh
+catch,gereftan
