@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLSparseMatrix Viewer</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+<body class="bg-light">
+
+    <div class="container mt-5">
+        <form class="form-inline mb-3" method="post" action="/add_term">
+            <div class="row">
+                <div class="col-3">
+                    <h3><label for="select1" class="mr-2">Select Sparse Matrix:</label></h3>
+                </div>
+                <div class="col-4">
+                    <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                      <input onclick="set_operand1()" type="radio" class="btn-check" value="1" name="obj" id="btnradio1" checked>
+                      <label onclick="set_operand1()" class="btn btn-outline-primary" for="btnradio1">Sparse Matrix 1</label>
+
+                      <input onclick="set_operand2()" type="radio" class="btn-check" value="2" name="obj" id="btnradio2">
+                      <label onclick="set_operand2()" class="btn btn-outline-primary" for="btnradio2">Sparse Matrix 2</label>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="form-group col-4">
+                    <label for="row" class="mr-2 h5">Row:</label>
+                    <input type="number" name="row" class="form-control" required>
+                </div>
+                <div class="form-group col-4">
+                    <label for="col" class="mr-2 h5">Column:</label>
+                    <input type="number" name="col" class="form-control" required>
+                </div>
+                <div class="form-group col-4">
+                    <label for="value" class="mr-2 h5">Value:</label>
+                    <input type="number" name="value" class="form-control" required>
+                </div>
+            </div>
+            <button type="submit" class="mt-2 btn btn-success">Add Term</button>
+        </form>
+
+        <div class="row">
+            <div class="col-3">
+                <form class="mb-3" method="post" id="add" action="/operation/1/add">
+                    <button type="submit" class="btn btn-warning mr-2 w-100">Add</button>
+                </form>
+            </div>
+            <div class="col-3">
+                <form class="mb-3" method="post" id="sub" action="/operation/1/subtract">
+                    <button type="submit" class="btn btn-warning mr-2 w-100">Subtract</button>
+                </form>
+            </div>
+            <div class="col-3">
+                <form class="mb-3" method="post" id="mult" action="/operation/1/multiply">
+                    <button type="submit" class="btn btn-warning w-100">Multiply</button>
+                </form>
+            </div>
+            <div class="col-3">
+                <form class="mb-3" method="post" id="transpose" action="/operation/1/transpose">
+                    <button type="submit" class="btn btn-warning w-100">Transpose</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-6">
+                    <h3 class="text-center mt-3">Sparse matrix 1</h3>
+                    <table class="table">
+                        <thead class="thead-light">
+                            <tr>
+                                <th class="text-center">Row</th>
+                                <th class="text-center">Column</th>
+                                <th class="text-center">Value</th>
+                                <th class="text-center">Remove</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for term in matrix_terms1 %}
+                                <tr>
+                                    <td class="text-center">{{ term.row }}</td>
+                                    <td class="text-center">{{ term.col }}</td>
+                                    <td class="text-center">{{ term.value }}</td>
+                                    <td class="text-center"><a href="/remove_term/1/{{ term.row }}/{{ term.col }}" class="btn btn-danger">Remove</a></td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-6">
+                    <h3 class="text-center mt-3">Sparse matrix 2</h3>
+                    <table class="table">
+                        <thead class="thead-light">
+                            <tr>
+                                <th class="text-center">Row</th>
+                                <th class="text-center">Column</th>
+                                <th class="text-center">Value</th>
+                                <th class="text-center">Remove</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for term in matrix_terms2 %}
+                                <tr>
+                                    <td class="text-center">{{ term.row }}</td>
+                                    <td class="text-center">{{ term.col }}</td>
+                                    <td class="text-center">{{ term.value }}</td>
+                                    <td class="text-center"><a href="/remove_term/2/{{ term.row }}/{{ term.col }}" class="btn btn-danger">Remove</a></td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script>
+        function set_operand1() {
+            document.getElementById('add').setAttribute('action', '/operation/1/add');
+            document.getElementById('sub').setAttribute('action', '/operation/1/subtract');
+            document.getElementById('mult').setAttribute('action', '/operation/1/multiply');
+            document.getElementById('transpose').setAttribute('action', '/operation/1/transpose');
+        }
+        function set_operand2() {
+            document.getElementById('add').setAttribute('action', '/operation/2/add');
+            document.getElementById('sub').setAttribute('action', '/operation/2/subtract');
+            document.getElementById('mult').setAttribute('action', '/operation/2/multiply');
+            document.getElementById('transpose').setAttribute('action', '/operation/2/transpose');
+        }
+    </script>
+    </body>
+</html>
