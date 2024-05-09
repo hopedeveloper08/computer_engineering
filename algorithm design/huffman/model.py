@@ -1,63 +1,97 @@
-class Node:
+import heapq
 
-    def __init__(self, latter, frequency, left=None, right=None):
-        self.latter = latter
-        self.frequency = frequency
+
+class Node:
+    def __init__(self, freq, char, left=None, right=None):
+        self.freq = freq
+        self.char = char
         self.left = left
         self.right = right
 
-    def __repr__(self):
-        return f"{{'latter': {self.latter}, 'frequency': {self.frequency}}}"
+    def __lt__(self, next_):
+        return self.freq < next_.freq
+
+    def __str__(self):
+        return f"({self.freq}, {self.char}, {self.left}, {self.right})"
 
 
 def read_data_from_file():
     with open('input.txt', 'r') as f:
-        file = f.read().split('\n')
+        file = f.read()
 
-    data = []
-    for row in file:
-        if ',' in row:
-            l, f = row.split(',')
-            data.append(Node(l, int(f)))
-
-    return data
+    return file
 
 
-def write_to_file(data):
+def write_to_file(data, code):
     with open('output.txt', 'w') as f:
+        f.writelines(code+'\n')
         for key, value in data.items():
-            f.writelines(f"{key},{value}\n")
+            f.writelines(f"{key}: {value}\n")
 
 
+# O(n)
+def convert_text_to_table(text):
+    table = dict()
+
+    for char in text:
+        table[char] = 0
+
+    for char in text:
+        table[char] += 1
+
+    return table
+
+
+# O(nlog(n))
 def build_huffman_tree(data):
-    while len(data) > 1:
-        data = sorted(data, key=lambda x: x.frequency)
+    heap = list()
 
-        left = data.pop(0)
-        right = data.pop(0)
+    for char, freq in data.items():  # O(nlog(n))
+        heapq.heappush(heap, Node(freq, char))
 
-        parent = Node(None, left.frequency + right.frequency, left, right)
+    while len(heap) > 1:  # O(n)
+        left = heapq.heappop(heap)
+        right = heapq.heappop(heap)
 
-        data.append(parent)
+        parent = Node(left.freq + right.freq, None, left, right)
 
-    return data[0]
+        heapq.heappush(heap, parent)
 
-
-def huffman_encoding(node, code, codes):
-    if node:
-        if node.latter:
-            codes[node.latter] = code
-        huffman_encoding(node.left, code + "0", codes)
-        huffman_encoding(node.right, code + "1", codes)
+    return heapq.heappop(heap)
 
 
-def main():
-    data = read_data_from_file()
-    root = build_huffman_tree(data)
-    codes = dict()
-    huffman_encoding(root, "", codes)
-    write_to_file(codes)
+# O(n)
+def huffman_encoding(tree, text):
+    code_table = dict()
+    _encoding(tree, '', code_table)
+
+    code = ''
+    for char in text:
+        code += code_table[char]
+
+    return code_table, code
 
 
-if __name__ == '__main__':
-    main()
+def _encoding(node, code, codes):
+    if node is None:
+        return
+
+    if node.char is not None:
+        codes[node.char] = code
+
+    _encoding(node.left, code + "0", codes)
+    _encoding(node.right, code + "1", codes)
+
+
+# O(n^2)
+def huffman_decoding(encoded_data, code_table):
+    decoded_data = ""
+    current_code = ""
+    for bit in encoded_data:
+        current_code += bit
+        for char, code in code_table.items():
+            if code == current_code:
+                decoded_data += char
+                current_code = ""
+                break
+    return decoded_data
