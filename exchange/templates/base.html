@@ -7,10 +7,9 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{% static 'bootstrap.rtl.min.css' %}">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <title>{% block title %}{% endblock %}</title>
-    <style>{% block css %}{% endblock %}</style>
     <style>
         .navbar-custom {
             background-color: #f8f9fa;
@@ -39,24 +38,21 @@
         }
     </style>
 </head>
-<body class="container bg-light">
+<body class="bg-light container-fluid">
 
     <nav class="navbar navbar-expand-lg navbar-custom">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">نام برند</a>
+            <a class="navbar-brand" href="/"><i class="fas fa-home text-primary me-1"></i>خانه</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="#">صفحه اصلی</a>
+                        <a class="nav-link" href="/market/overview"><i class="fas fa-usd text-primary me-1"></i>بازار</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">درباره ما</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">خدمات</a>
+                        <a class="nav-link" href="/market/signal"><i class="fas fa-bell text-primary me-1"></i>سیگنال</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">تماس با ما</a>
@@ -88,9 +84,13 @@
         </div>
     </nav>
 
-    {% block body %}{% endblock %}
+    <div class="container">
+        {% block body %}{% endblock %}
+    </div>
 
 
 <script src="{% static 'bootstrap.bundle.min.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
 </body>
 </html>

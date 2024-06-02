@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}نمای کلی بازار{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="table-responsive">
+        <table class="table table-hover table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">لوگو</th>
+                    <th scope="col">نام</th>
+                    <th scope="col">نماد</th>
+                    <th scope="col">قیمت لحظه ای</th>
+                    <th scope="col">تغییرات روزانه</th>
+                    <th scope="col">تغییر حجم روزانه</th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider">
+                {% for coin in data %}
+                <tr class="clickable-row" data-href="{{ coin.symbol }}">
+                    <td><img src="{{ coin.logo_url }}" alt="{{ coin.name }} logo"></td>
+                    <td>{{ coin.name }}</td>
+                    <td>{{ coin.symbol }}</td>
+                    <td>${{ coin.price|floatformat:2 }}</td>
+                    <td class="{% if coin.percent_change_24h < 0 %}text-danger{% else %}text-success{% endif %}">
+                        {{ coin.percent_change_24h|floatformat:2 }}%</td>
+                    <td class="{% if coin.volume_change_24h < 0 %}text-danger{% else %}text-success{% endif %}">
+                        {{ coin.volume_change_24h|floatformat:2 }}%</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        let rows = document.querySelectorAll(".clickable-row");
+        rows.forEach(function(row) {
+            row.addEventListener("click", function() {
+                window.location.href = `/market/currency_info/${row.dataset.href}`;
+            });
+        });
+    });
+</script>
+{% endblock %}

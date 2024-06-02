@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}گزارش {{ symbol }}{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="card mb-4">
+        <div class="card-header d-flex align-items-center justify-content-between">
+            <img src="{{ logo_url }}" alt="{{ name }} logo" class="img-thumbnail" style="width: 50px; height: 50px;">
+            <h3 class="ms-3">{{ name }} ({{ symbol }})</h3>
+        </div>
+        <div class="card-body">
+            <div class="row mb-2">
+                <div class="col-12 text-center">
+                    <img src="{% static 'chart.png' %}" alt="نمودار {{ symbol }}" class="img-fluid">
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-6"><strong>قیمت:</strong></div>
+                <div class="col-6 text-end">${{ price }}</div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-6"><strong>درصد تغییرات قیمت ساعتی:</strong></div>
+                <div class="col-6 text-end">
+                    <span class="{% if percent_change_1h < 0 %}text-danger{% else %}text-success{% endif %}">
+                        {{ percent_change_1h|floatformat:2 }}%
+                    </span>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-6"><strong>درصد تغییرات قیمت روزانه:</strong></div>
+                <div class="col-6 text-end">
+                    <span class="{% if percent_change_24h < 0 %}text-danger{% else %}text-success{% endif %}">
+                        {{ percent_change_24h|floatformat:2 }}%
+                    </span>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-6"><strong>درصد تغییرات قیمت هفتگی:</strong></div>
+                <div class="col-6 text-end">
+                    <span class="{% if percent_change_7d < 0 %}text-danger{% else %}text-success{% endif %}">
+                        {{ percent_change_7d|floatformat:2 }}%
+                    </span>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-6"><strong>درصد تغییرات قیمت ماهانه:</strong></div>
+                <div class="col-6 text-end">
+                    <span class="{% if percent_change_30d < 0 %}text-danger{% else %}text-success{% endif %}">
+                        {{ percent_change_30d|floatformat:2 }}%
+                    </span>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-6"><strong>حجم بازار:</strong></div>
+                <div class="col-6 text-end">{{ market_cap|floatformat:2 }}</div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-6"><strong>تغییرات حجم روزانه:</strong></div>
+                <div class="col-6 text-end">
+                    <span class="{% if volume_change_24h < 0 %}text-danger{% else %}text-success{% endif %}">
+                        {{ volume_change_24h|floatformat:2 }}%
+                    </span>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-6"><strong>دامیننس:</strong></div>
+                <div class="col-6 text-end">{{ market_cap_dominance|floatformat:2 }}%</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
